@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 	# Enemy is close enough to attack
 	elif attackRayColliding() and current_state != State.ATTACK:
 		current_state = State.ATTACK
-		
+					
 	match current_state:
 		State.IDLE:
 			animated_sprite.play("idle")
@@ -72,7 +72,7 @@ func _process(delta: float) -> void:
 				head_collision_shape.disabled = false
 		State.PURSUIT:
 			animated_sprite.play("run")
-			
+						
 			if ray_cast_left_player_pursuit.is_colliding():
 				if dir == 1:
 					flipSprite()
@@ -121,14 +121,15 @@ func resetIdleRunTimer():
 	idle_run_timer.start(randi()%3)
 	
 func apply_movement(speed: int, delta: float):
-	# enemy sees wall
-	if (ray_cast_left.is_colliding()):
-		dir = 1
-		flipSprite()
-	elif (ray_cast_right.is_colliding()):
-		dir = -1
-		flipSprite()
-
+	if isFacingLeft():
+		if ray_cast_left.is_colliding():
+			flipSprite()
+			dir *= -1
+	else:
+		if ray_cast_right.is_colliding():
+			flipSprite() 
+			dir *= -1
+		
 	position.x += dir * speed * delta
 
 func pursuitRayColliding():
