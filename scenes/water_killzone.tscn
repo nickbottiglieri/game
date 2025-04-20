@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0r1kr78x0vmj"]
+
+[ext_resource type="PackedScene" uid="uid://kv84j8ka285q" path="res://scenes/killzone.tscn" id="1_ep4np"]
+[ext_resource type="Script" uid="uid://do7eyjovcfaty" path="res://scripts/water_killzone.gd" id="2_i8psu"]
+
+[node name="waterKillzone" instance=ExtResource("1_ep4np")]
+script = ExtResource("2_i8psu")
