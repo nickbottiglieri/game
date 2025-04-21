@@ -37,7 +37,7 @@ func _on_ready() -> void:
 func deal_damage():
 	game_manager.damage_player(DAMAGE_DEALT)
 
-func _process(delta: float) -> void:
+func _process(delta: float) -> void:	
 	# Enemy sees player, not close enough to attack, and not currently attacking
 	if enemySeesPlayer() and not attackRayColliding() and current_state != State.ATTACK and current_state != State.PURSUIT:
 		current_state = State.PURSUIT
@@ -70,7 +70,7 @@ func _process(delta: float) -> void:
 					attack_right_collision_shape.disabled = true
 					
 				head_collision_shape.disabled = false
-		State.PURSUIT:
+		State.PURSUIT:			
 			animated_sprite.play("run")
 						
 			if ray_cast_left_player_pursuit.is_colliding():
@@ -131,10 +131,7 @@ func apply_movement(speed: int, delta: float):
 			dir *= -1
 		
 	position.x += dir * speed * delta
-
-func pursuitRayColliding():
-	return (ray_cast_left_player_pursuit.is_colliding()) or (ray_cast_right_player_pursuit.is_colliding())
-
+	
 func enemySeesPlayer():
 	return (ray_cast_left_player_pursuit.is_colliding() and dir == -1) or (ray_cast_right_player_pursuit.is_colliding() and dir == 1)
 	
@@ -157,3 +154,6 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 				
 func isFacingLeft():
 	return dir == -1
+	
+func wallRayColliding():
+	(isFacingLeft() and ray_cast_left.is_colliding()) or (not isFacingLeft() and ray_cast_right.is_colliding())

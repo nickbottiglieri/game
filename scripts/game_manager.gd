@@ -1,7 +1,6 @@
 extends Node
 
 # Sounds
-@onready var pickup_sound: AudioStreamPlayer2D = $sounds/pickupSound
 @onready var damage_sound: AudioStreamPlayer2D = $sounds/damageSound
 @onready var save_sound: AudioStreamPlayer2D = $sounds/saveSound
 @onready var save_points: Node = $"../savePoints"
@@ -71,9 +70,6 @@ func update_coin_display(coins: int):
 	
 func update_health_display(health: int):
 	hud.update_health_display(health)
-
-func play_pickup_sound():
-	pickup_sound.play()
 	
 func play_damage_sound():
 	damage_sound.play()
