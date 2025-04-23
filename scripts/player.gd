@@ -11,10 +11,12 @@ const JUMP_VELOCITY: float = -300.0
 enum State { NORMAL, ROLLING, DAMAGE, SAVE }
 var current_state: State = State.NORMAL
 
+# player stats
 var maxHealth: int = 3
 var health: int = 3
 var coins: int = 0
 
+# duration of invincibility after taking damage
 var damage_timer: float = 0.0
 const DAMAGE_DURATION: float = 1.5
 
@@ -24,25 +26,22 @@ func _ready() -> void:
 	hud.update_health_display(health)
 	hud.update_coin_display(coins)
 	
-	Global.game_manager.connect("player_damage", take_damage)
-	Global.game_manager.connect("player_add_coin", add_coin)
-	Global.game_manager.connect("player_save_zone", save_game)
-	Global.game_manager.connect("player_death", reset_to_save)
-	Global.game_manager.connect("player_load_level", set_new_level_position)
-	
+# player visits save zone
 func save_game():
 	current_state = State.SAVE
-	Global.game_manager.save_stats(coins, health)
 	full_heal()
 
+# reset health to max
 func full_heal():
 	health = maxHealth
 	Global.game_manager.update_health_display(health)
 
+# player collects a coin
 func add_coin():
 	coins += 1
 	Global.game_manager.update_coin_display(coins)
 
+# player takes damage
 func take_damage(damage_dealt):
 	if current_state == State.DAMAGE:
 		return
@@ -51,41 +50,49 @@ func take_damage(damage_dealt):
 	health -= damage_dealt
 	Global.game_manager.play_damage_sound()
 	Global.game_manager.update_health_display(health)
-			
-func die():
-	Global.game_manager.return_to_save_point();
+
+# player dies
+func die():		
+	# reset coins to before death
+	Global.game_manager.reset_coins()
+	self.coins = Global.game_manager.playerSave.coins
+	hud.update_coin_display(coins)
 	
+	# reset player position to last save
+	self.global_position = Global.game_manager.playerSave.position
+	
+	full_heal()
+	self.current_state = State.NORMAL
+
+# player transitions to a new level
 func set_new_level_position(portal_id):
+	# find the corresponding portal in the new level
 	var levelTransitionNodes = get_tree().get_nodes_in_group("level_transitions")
 	var correspondingTransitionNode = findMatch(levelTransitionNodes, portal_id)
+	
+	# set the players position to the new portal
 	self.global_position.x = correspondingTransitionNode.global_position.x
 	self.global_position.y = correspondingTransitionNode.global_position.y - 25
 	
+# find corresponding portal_id to portal that was just used
 func findMatch(list, portalId):
 	for item in list:
 		if (item.portal_id == portalId and item.isActive):
-			return item
-
-func reset_to_save(savePosition: Vector2, coinsBeforeDeath: int):
-	self.global_position = savePosition
-	coins = coinsBeforeDeath
-	Global.game_manager.update_coin_display(coins)
-	full_heal()
-	current_state = State.NORMAL
+			return item	
 		
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	# add gravity
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Handle jump.
+	# handle jump
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction -1, 0, 1
+	# get the input direction (-1, 0, 1)
 	var direction := Input.get_axis("move_left", "move_right")
 
-	# Flip the sprite
+	# flip the sprite 
 	if direction > 0:
 		animated_sprite.flip_h = false
 	elif direction < 0:
@@ -95,8 +102,7 @@ func _physics_process(delta: float) -> void:
 		State.NORMAL:
 			if Input.is_action_just_pressed("roll"):
 				current_state = State.ROLLING
-				
-			#Play animations    
+				 
 			if is_on_floor():
 				if direction == 0:
 					animated_sprite.play("idle")
@@ -108,6 +114,7 @@ func _physics_process(delta: float) -> void:
 		State.ROLLING:
 			animated_sprite.play("roll")
 			
+			# switch hitbox when player rolls (only for certain frames) 
 			if animated_sprite.frame >= 2 && animated_sprite.frame <= 6:
 				normal_collision_shape.disabled = true
 				roll_collision_shape.disabled = false

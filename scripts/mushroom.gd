@@ -10,8 +10,6 @@ extends Node2D
 @onready var ray_cast_right_player_attack: RayCast2D = $RayCastRightPlayerAttack
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var player: CharacterBody2D = %Player
-
 @onready var idle_run_timer: Timer = $idleRunTimer
 @onready var pursuit_timer: Timer = $pursuitTimer
 
@@ -153,6 +151,3 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 				
 func isFacingLeft():
 	return dir == -1
-	
-func wallRayColliding():
-	(isFacingLeft() and ray_cast_left.is_colliding()) or (not isFacingLeft() and ray_cast_right.is_colliding())
