@@ -6,7 +6,7 @@ const JUMP_VELOCITY: float = -300.0
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var normal_collision_shape: CollisionShape2D = $normalCollisionShape
 @onready var roll_collision_shape: CollisionShape2D = $rollCollisionShape
-@onready var game_manager: Node = %gameManager
+@onready var hud: CanvasLayer = $"../gameManager/HUD"
 
 enum State { NORMAL, ROLLING, DAMAGE, SAVE }
 var current_state: State = State.NORMAL
@@ -19,25 +19,29 @@ var damage_timer: float = 0.0
 const DAMAGE_DURATION: float = 1.5
 
 func _ready() -> void:
-	game_manager.update_health_display(health)
-	game_manager.update_coin_display(coins)
-	game_manager.connect("player_damage", take_damage)
-	game_manager.connect("player_add_coin", add_coin)
-	game_manager.connect("player_save_zone", save_game)
-	game_manager.connect("player_death", reset_to_save)
+	Global.player = self
+				
+	hud.update_health_display(health)
+	hud.update_coin_display(coins)
+	
+	Global.game_manager.connect("player_damage", take_damage)
+	Global.game_manager.connect("player_add_coin", add_coin)
+	Global.game_manager.connect("player_save_zone", save_game)
+	Global.game_manager.connect("player_death", reset_to_save)
+	Global.game_manager.connect("player_load_level", set_new_level_position)
 	
 func save_game():
 	current_state = State.SAVE
-	game_manager.save_stats(coins, health)
+	Global.game_manager.save_stats(coins, health)
 	full_heal()
 
 func full_heal():
 	health = maxHealth
-	game_manager.update_health_display(health)
+	Global.game_manager.update_health_display(health)
 
 func add_coin():
 	coins += 1
-	game_manager.update_coin_display(coins)
+	Global.game_manager.update_coin_display(coins)
 
 func take_damage(damage_dealt):
 	if current_state == State.DAMAGE:
@@ -45,19 +49,30 @@ func take_damage(damage_dealt):
 	
 	current_state = State.DAMAGE
 	health -= damage_dealt
-	game_manager.play_damage_sound()
-	game_manager.update_health_display(health)
+	Global.game_manager.play_damage_sound()
+	Global.game_manager.update_health_display(health)
 			
 func die():
-	game_manager.return_to_save_point();
+	Global.game_manager.return_to_save_point();
 	
+func set_new_level_position(portal_id):
+	var levelTransitionNodes = get_tree().get_nodes_in_group("level_transitions")
+	var correspondingTransitionNode = findMatch(levelTransitionNodes, portal_id)
+	self.global_position.x = correspondingTransitionNode.global_position.x
+	self.global_position.y = correspondingTransitionNode.global_position.y - 25
+	
+func findMatch(list, portalId):
+	for item in list:
+		if (item.portal_id == portalId and item.isActive):
+			return item
+
 func reset_to_save(savePosition: Vector2, coinsBeforeDeath: int):
-	global_position = savePosition
+	self.global_position = savePosition
 	coins = coinsBeforeDeath
-	game_manager.update_coin_display(coins)
+	Global.game_manager.update_coin_display(coins)
 	full_heal()
 	current_state = State.NORMAL
-	
+		
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():

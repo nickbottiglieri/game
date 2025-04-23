@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var killzone: Area2D = $killzone
-@onready var game_manager: Node = %gameManager
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -18,7 +17,7 @@ func _ready() -> void:
 	killzone.hit.connect(deal_damage)
 
 func deal_damage():
-	game_manager.damage_player(DAMAGE_DEALT)
+	Global.game_manager.damage_player(DAMAGE_DEALT)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:	

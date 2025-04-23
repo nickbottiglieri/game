@@ -11,11 +11,13 @@ config_version=5
 [application]
 
 config/name="My Game"
+run/main_scene="uid://dhfdora6jw4ux"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
 
 Music="*res://scenes/music.tscn"
+Global="*res://scripts/Global.gd"
 
 [debug]
 
@@ -27,6 +29,10 @@ settings/stdout/verbose_stdout=true
 
 window/size/viewport_width=2560
 window/size/viewport_height=1440
+
+[global_group]
+
+level_transitions=""
 
 [gui]
 

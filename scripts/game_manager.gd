@@ -3,8 +3,6 @@ extends Node
 # Sounds
 @onready var damage_sound: AudioStreamPlayer2D = $sounds/damageSound
 @onready var save_sound: AudioStreamPlayer2D = $sounds/saveSound
-@onready var save_points: Node = $"../savePoints"
-@onready var player: CharacterBody2D = $"../Player"
 
 @onready var hud: CanvasLayer = $HUD
 
@@ -13,20 +11,40 @@ signal player_damage
 signal player_add_coin
 signal player_save_zone
 signal player_death(playerSaveLoc: Vector2, playerSaveCoins: int)
+signal player_load_level(portalId: int)
 
-var playerSave
+var playerSave = {
+	level = 1,
+	zoneId = 0,
+	position = null,
+	coins = 0,
+	health = 3,
+}
 var playerStatusChanged = false
 var unsavedCoinNodes: Array[Node] = []
 
-@onready var start_save_point = save_points.get_child(0)
+var level_instance
+var level_resources: Array = []
+var level_1 = preload("res://scenes/level_1.tscn")
+var level_2 = preload("res://scenes/level_2.tscn")
 
 func _on_ready() -> void:
-	playerSave = {
-		zoneId = 0,
-		position = player.global_position,
-		coins = 0,
-		health = 3,
-	}
+	Global.game_manager = self
+	level_resources.append(level_1)
+	level_resources.append(level_2)
+	load_level(1)
+	
+func unload_level():
+	if (level_instance):
+		level_instance.queue_free()
+	
+func load_level(level: int, portal_id: int = -1):
+	unload_level()
+	level_instance = level_resources.get(level -1).instantiate()
+	get_tree().root.add_child.call_deferred(level_instance)
+	
+	if portal_id != -1:
+		player_load_level.emit.call_deferred(portal_id)
 
 func save_game(zoneId: int, position: Vector2):
 	

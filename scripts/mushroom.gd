@@ -1,7 +1,6 @@
 extends Node2D
 
 @onready var killzone: Area2D = $killzone
-@onready var game_manager: Node = %gameManager
 
 @onready var ray_cast_right: RayCast2D = $RayCastRight
 @onready var ray_cast_left: RayCast2D = $RayCastLeft
@@ -35,7 +34,7 @@ func _on_ready() -> void:
 	idle_run_timer.start(randi()%3)
 	
 func deal_damage():
-	game_manager.damage_player(DAMAGE_DEALT)
+	Global.game_manager.damage_player(DAMAGE_DEALT)
 
 func _process(delta: float) -> void:	
 	# Enemy sees player, not close enough to attack, and not currently attacking
