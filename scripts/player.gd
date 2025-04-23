@@ -34,12 +34,12 @@ func save_game():
 # reset health to max
 func full_heal():
 	health = maxHealth
-	Global.game_manager.update_health_display(health)
+	hud.update_health_display(health)
 
 # player collects a coin
 func add_coin():
 	coins += 1
-	Global.game_manager.update_coin_display(coins)
+	hud.update_coin_display(coins)
 
 # player takes damage
 func take_damage(damage_dealt):
@@ -49,7 +49,7 @@ func take_damage(damage_dealt):
 	current_state = State.DAMAGE
 	health -= damage_dealt
 	Global.game_manager.play_damage_sound()
-	Global.game_manager.update_health_display(health)
+	hud.update_health_display(health)
 
 # player dies
 func die():		
@@ -67,18 +67,23 @@ func die():
 # player transitions to a new level
 func set_new_level_position(portal_id):
 	# find the corresponding portal in the new level
-	var levelTransitionNodes = get_tree().get_nodes_in_group("level_transitions")
-	var correspondingTransitionNode = findMatch(levelTransitionNodes, portal_id)
-	
+	var levelTransitionNodes: Array[Node] = get_tree().get_nodes_in_group("level_transitions")
+	var correspondingTransitionNode: Node = findMatch(levelTransitionNodes, portal_id)
+
+	if correspondingTransitionNode == null:
+		print("portal not found for portal id %s" % portal_id) 
+
 	# set the players position to the new portal
-	self.global_position.x = correspondingTransitionNode.global_position.x
-	self.global_position.y = correspondingTransitionNode.global_position.y - 25
+	print("updating player position in new level...")
+	self.global_position = correspondingTransitionNode.global_position
+	Global.game_manager.playerSave.position = self.global_position
 	
 # find corresponding portal_id to portal that was just used
 func findMatch(list, portalId):
 	for item in list:
 		if (item.portal_id == portalId and item.isActive):
-			return item	
+			return item
+	return null
 		
 func _physics_process(delta: float) -> void:
 	# add gravity

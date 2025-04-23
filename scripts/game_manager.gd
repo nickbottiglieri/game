@@ -19,15 +19,18 @@ func _on_ready() -> void:
 	Global.game_manager = self
 	level_resources.append(level_1)
 	level_resources.append(level_2)
+	
+	var level: int = 1
+	load_level(level)
+		
 	playerSave = {
-		level = 1,
+		level = level,
 		zoneId = 0,
-		position = player.global_position,
+		position = Vector2(-400, 50),
 		coins = 0,
 		health = 3,
 	}
-	load_level(1)
-
+	
 func unload_level():
 	if (level_instance):
 		level_instance.queue_free()
@@ -38,8 +41,7 @@ func load_level(level: int, portal_id: int = -1):
 	get_tree().root.add_child.call_deferred(level_instance)
 	
 	# set the player in the corresponding position for the portal
-	if portal_id != -1:
-		player.set_new_level_position.call_deferred(portal_id)
+	player.set_new_level_position.call_deferred(portal_id)
 
 func save_game(zoneId: int, position: Vector2):
 	

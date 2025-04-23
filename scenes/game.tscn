@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://bbuabuciooak2" path="res://scenes/player.tscn" id="5_iywne"]
 
 [node name="game" type="Node2D"]
-position = Vector2(-430, -42)
 
 [node name="gameManager" type="Node" parent="."]
 unique_name_in_owner = true
@@ -29,6 +28,5 @@ bus = &"SFX"
 
 [node name="Player" parent="." instance=ExtResource("5_iywne")]
 unique_name_in_owner = true
-position = Vector2(2153, -462)
 
 [connection signal="ready" from="gameManager" to="gameManager" method="_on_ready"]

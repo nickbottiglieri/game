@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=4 uid="uid://du0wymvvlmrfa"]
+[gd_scene load_steps=8 format=4 uid="uid://du0wymvvlmrfa"]
 
 [ext_resource type="Texture2D" uid="uid://c4uo4pvl1bydc" path="res://assets/sprites/Terrain (32x32).png" id="1_jm1iu"]
 [ext_resource type="Texture2D" uid="uid://cl3ce7vn1h83u" path="res://assets/sprites/Decorations (32x32).png" id="2_pbc48"]
+[ext_resource type="PackedScene" uid="uid://g6j1ov5otip3" path="res://scenes/level_start.tscn" id="4_b4j7a"]
 [ext_resource type="PackedScene" uid="uid://d73xfs22hjha" path="res://scenes/level_transition.tscn" id="4_eqxsl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eqxsl"]
@@ -649,3 +650,7 @@ tile_set = SubResource("TileSet_wo48x")
 
 [node name="levelTransition" parent="." groups=["level_transitions"] instance=ExtResource("4_eqxsl")]
 position = Vector2(25, 55)
+
+[node name="levelStart" parent="." instance=ExtResource("4_b4j7a")]
+position = Vector2(52, 46)
+level = 2
