@@ -1,16 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhfdora6jw4ux"]
+[gd_scene load_steps=7 format=3 uid="uid://dhfdora6jw4ux"]
 
 [ext_resource type="Script" uid="uid://dnkh1si6hgbdg" path="res://scripts/game_manager.gd" id="1_0tnpc"]
 [ext_resource type="PackedScene" uid="uid://ome13cpnti0d" path="res://scenes/hud.tscn" id="1_kvpfn"]
 [ext_resource type="AudioStream" uid="uid://6dvybbw27tdr" path="res://assets/sounds/save_game.mp3" id="4_kvuet"]
 [ext_resource type="AudioStream" uid="uid://duqkhsutl3ujj" path="res://assets/sounds/hurt.wav" id="4_vtaks"]
 [ext_resource type="PackedScene" uid="uid://bbuabuciooak2" path="res://scenes/player.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://716vigb683gc" path="res://scenes/scene_transition.tscn" id="5_p57ef"]
 
 [node name="game" type="Node2D"]
 
 [node name="gameManager" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_0tnpc")
+startLevel = 2
 
 [node name="sounds" type="Node" parent="gameManager"]
 
@@ -25,6 +27,8 @@ max_distance = 1e+11
 bus = &"SFX"
 
 [node name="HUD" parent="gameManager" instance=ExtResource("1_kvpfn")]
+
+[node name="sceneTransition" parent="gameManager" instance=ExtResource("5_p57ef")]
 
 [node name="Player" parent="." instance=ExtResource("5_iywne")]
 unique_name_in_owner = true

@@ -3,44 +3,51 @@ extends Node
 @onready var damage_sound: AudioStreamPlayer2D = $sounds/damageSound
 @onready var save_sound: AudioStreamPlayer2D = $sounds/saveSound
 
+@onready var scene_transition: AnimationPlayer = $sceneTransition/AnimationPlayer
+
 @onready var player: CharacterBody2D = %Player
 @onready var hud: CanvasLayer = $HUD
 
+@export var startLevel: int = 1
+
 var playerSave
+var currentLevel = startLevel
 var playerStatusChanged = false
 var unsavedCoinNodes: Array[Node] = []
 
 var level_instance
-var level_resources: Array = []
-var level_1 = preload("res://scenes/level_1.tscn")
-var level_2 = preload("res://scenes/level_2.tscn")
+var level_resources: Array = [
+	preload("res://scenes/level_1.tscn"), 
+	preload("res://scenes/level_2.tscn"), 
+	preload("res://scenes/level_3.tscn")
+]
 
 func _on_ready() -> void:
 	Global.game_manager = self
-	level_resources.append(level_1)
-	level_resources.append(level_2)
 	
-	var level: int = 1
-	load_level(level)
-		
 	playerSave = {
-		level = level,
+		level = startLevel,
 		zoneId = 0,
-		position = Vector2(-400, 50),
+		position = Vector2(0, 0),
 		coins = 0,
 		health = 3,
 	}
-	
+		
+	enter_portal(startLevel)
+		
 func unload_level():
 	if (level_instance):
 		level_instance.queue_free()
 
-func load_level(level: int, portal_id: int = -1):
+func load_level(level: int):
 	unload_level()
-	level_instance = level_resources.get(level -1).instantiate()
+	level_instance = level_resources.get(level - 1).instantiate()
 	get_tree().root.add_child.call_deferred(level_instance)
-	
-	# set the player in the corresponding position for the portal
+
+# load the new level and set the player's position to the
+# corresponding portal in the new level
+func enter_portal(level: int, portal_id: int = -1):
+	load_level(level)
 	player.set_new_level_position.call_deferred(portal_id)
 
 func save_game(zoneId: int, position: Vector2):
@@ -59,6 +66,7 @@ func save_game(zoneId: int, position: Vector2):
 	playerSave.position = position
 	playerSave.coins = player.coins
 	playerSave.health = player.health
+	playerSave.level = currentLevel
 	
 	play_save_game_sound()
 	

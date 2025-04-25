@@ -7,6 +7,7 @@ const JUMP_VELOCITY: float = -300.0
 @onready var normal_collision_shape: CollisionShape2D = $normalCollisionShape
 @onready var roll_collision_shape: CollisionShape2D = $rollCollisionShape
 @onready var hud: CanvasLayer = $"../gameManager/HUD"
+@onready var camera_2d: Camera2D = $Camera2D
 
 enum State { NORMAL, ROLLING, DAMAGE, SAVE }
 var current_state: State = State.NORMAL
@@ -58,7 +59,10 @@ func die():
 	self.coins = Global.game_manager.playerSave.coins
 	hud.update_coin_display(coins)
 	
-	# reset player position to last save
+	#load the level that the player last saved in
+	Global.game_manager.load_level(Global.game_manager.playerSave.level)
+	
+	# reset the player to their position in their last save
 	self.global_position = Global.game_manager.playerSave.position
 	
 	full_heal()
@@ -72,11 +76,10 @@ func set_new_level_position(portal_id):
 
 	if correspondingTransitionNode == null:
 		print("portal not found for portal id %s" % portal_id) 
-
+		
 	# set the players position to the new portal
-	print("updating player position in new level...")
-	self.global_position = correspondingTransitionNode.global_position
-	Global.game_manager.playerSave.position = self.global_position
+	self.global_position.x = correspondingTransitionNode.global_position.x
+	self.global_position.y = correspondingTransitionNode.global_position.y - 50
 	
 # find corresponding portal_id to portal that was just used
 func findMatch(list, portalId):

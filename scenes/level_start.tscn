@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://g6j1ov5otip3"]
-
-[ext_resource type="Script" uid="uid://daahcb86xkdip" path="res://scripts/level_start.gd" id="1_1ag0p"]
-
-[node name="levelStart" type="Node2D" groups=["level_start"]]
-script = ExtResource("1_1ag0p")
