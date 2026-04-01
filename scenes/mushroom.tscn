@@ -1,9 +1,9 @@
 [gd_scene load_steps=35 format=3 uid="uid://bssnld6f5jjlj"]
 
-[ext_resource type="Texture2D" uid="uid://m22wo5cpvu56" path="res://assets/sprites/Mushroom/Mushroom-Attack.png" id="1_6c3h1"]
-[ext_resource type="Texture2D" uid="uid://dna2m5fy1sgmx" path="res://assets/sprites/Mushroom/Mushroom-Idle.png" id="1_b0s10"]
+[ext_resource type="Texture2D" uid="uid://m22wo5cpvu56" path="res://assets/sprites/enemies/Mushroom/Mushroom-Attack.png" id="1_6c3h1"]
+[ext_resource type="Texture2D" uid="uid://dna2m5fy1sgmx" path="res://assets/sprites/enemies/Mushroom/Mushroom-Idle.png" id="1_b0s10"]
 [ext_resource type="Script" uid="uid://gyhtdx4wwfkv" path="res://scripts/mushroom.gd" id="1_f4pa7"]
-[ext_resource type="Texture2D" uid="uid://cc3ic83ypxdw3" path="res://assets/sprites/Mushroom/Mushroom-Run.png" id="2_0bdi0"]
+[ext_resource type="Texture2D" uid="uid://cc3ic83ypxdw3" path="res://assets/sprites/enemies/Mushroom/Mushroom-Run.png" id="2_0bdi0"]
 [ext_resource type="PackedScene" uid="uid://kv84j8ka285q" path="res://scenes/killzone.tscn" id="4_f4pa7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0w611"]
@@ -215,10 +215,10 @@ script = ExtResource("1_f4pa7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_drnli")
-animation = &"attack"
+animation = &"run"
 autoplay = "idle"
-frame = 9
-frame_progress = 1.0
+frame = 6
+frame_progress = 0.471771
 
 [node name="killzone" parent="." instance=ExtResource("4_f4pa7")]
 

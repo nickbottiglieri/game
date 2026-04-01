@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bst1gv6e1shss"]
 
-[ext_resource type="Texture2D" uid="uid://jajdkdfrc328" path="res://assets/sprites/fruit.png" id="1_v3wuo"]
+[ext_resource type="Texture2D" uid="uid://jajdkdfrc328" path="res://assets/sprites/items/fruit.png" id="1_v3wuo"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ocds8"]
 

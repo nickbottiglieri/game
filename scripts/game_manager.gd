@@ -8,7 +8,7 @@ extends Node
 @onready var player: CharacterBody2D = %Player
 @onready var hud: CanvasLayer = $HUD
 
-@export var startLevel: int = 1
+@export var startLevel: int
 
 var playerSave
 var currentLevel = startLevel
@@ -19,7 +19,8 @@ var level_instance
 var level_resources: Array = [
 	preload("res://scenes/level_1.tscn"), 
 	preload("res://scenes/level_2.tscn"), 
-	preload("res://scenes/level_3.tscn")
+	preload("res://scenes/level_3.tscn"),
+	preload("res://scenes/level_4.tscn"),
 ]
 
 func _on_ready() -> void:
@@ -32,23 +33,55 @@ func _on_ready() -> void:
 		coins = 0,
 		health = 3,
 	}
-		
+	
 	enter_portal(startLevel)
 		
 func unload_level():
-	if (level_instance):
+	if (is_instance_valid(level_instance)):
 		level_instance.queue_free()
+	level_instance = null
 
 func load_level(level: int):
 	unload_level()
 	level_instance = level_resources.get(level - 1).instantiate()
 	get_tree().root.add_child.call_deferred(level_instance)
 
+# reset level upon player death
+func reset_level():
+	if currentLevel != playerSave.level:
+		load_level(playerSave.level)
+
 # load the new level and set the player's position to the
 # corresponding portal in the new level
-func enter_portal(level: int, portal_id: int = -1):
+func enter_portal(level: int, portal_id: int = -1, x_offset: int = 0, y_offset: int = 0):
 	load_level(level)
-	player.set_new_level_position.call_deferred(portal_id)
+	currentLevel = level
+	set_new_level_position.call_deferred(portal_id, x_offset, y_offset)
+	
+# player transitions to a new level
+func set_new_level_position(portal_id: int, x_offset: int, y_offset: int):
+	
+	Global.player.startSceneTransition()
+	
+	# find the corresponding portal in the new level
+	var levelTransitionNodes: Array[Node] = get_tree().get_nodes_in_group("level_transitions")
+	var correspondingTransitionNode: Node = findMatch(levelTransitionNodes, portal_id)
+
+	if correspondingTransitionNode == null:
+		print("portal not found for portal id %s" % portal_id) 
+		
+	# set the players position to the new portal
+	Global.player.position.x = correspondingTransitionNode.global_position.x + x_offset
+	Global.player.position.y = correspondingTransitionNode.global_position.y + y_offset
+	
+	Global.player.endSceneTransition()
+	
+# find corresponding portal_id to portal that was just used
+func findMatch(list, portalId):
+	for item in list:
+		if (item.portal_id == portalId and item.isActive):
+			return item
+	return null
 
 func save_game(zoneId: int, position: Vector2):
 	

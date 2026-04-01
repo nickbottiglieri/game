@@ -1,10 +1,10 @@
 [gd_scene load_steps=38 format=3 uid="uid://r5p8yhoody3g"]
 
 [ext_resource type="Script" uid="uid://cyx1ayt0dtqt" path="res://scripts/player.gd" id="1_qvcrf"]
-[ext_resource type="Texture2D" uid="uid://db7gotlb7yvq7" path="res://assets/sprites/cat/1_Cat_Idle-Sheet.png" id="2_dtsim"]
-[ext_resource type="Texture2D" uid="uid://b0jqsue2mluv" path="res://assets/sprites/cat/3_Cat_Jump-Sheet.png" id="3_gvw32"]
-[ext_resource type="Texture2D" uid="uid://crsvndul8ehxn" path="res://assets/sprites/cat/2_Cat_Run-Sheet.png" id="3_jy7fp"]
-[ext_resource type="Texture2D" uid="uid://cnap6g74h2xp2" path="res://assets/sprites/cat/4_Cat_Fall-Sheet.png" id="5_y21sd"]
+[ext_resource type="Texture2D" uid="uid://db7gotlb7yvq7" path="res://assets/sprites/characters/cat/1_Cat_Idle-Sheet.png" id="2_dtsim"]
+[ext_resource type="Texture2D" uid="uid://b0jqsue2mluv" path="res://assets/sprites/characters/cat/3_Cat_Jump-Sheet.png" id="3_gvw32"]
+[ext_resource type="Texture2D" uid="uid://crsvndul8ehxn" path="res://assets/sprites/characters/cat/2_Cat_Run-Sheet.png" id="3_jy7fp"]
+[ext_resource type="Texture2D" uid="uid://cnap6g74h2xp2" path="res://assets/sprites/characters/cat/4_Cat_Fall-Sheet.png" id="5_y21sd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a0jyo"]
 atlas = ExtResource("5_y21sd")

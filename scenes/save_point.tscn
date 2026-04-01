@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://wpbl06mp675m"]
 
 [ext_resource type="Script" uid="uid://ccuiusp4slkrc" path="res://scripts/save_point.gd" id="1_n8qrg"]
-[ext_resource type="Texture2D" uid="uid://bgqgx8i7ye22b" path="res://assets/sprites/campfire.png" id="2_xvfwu"]
+[ext_resource type="Texture2D" uid="uid://bgqgx8i7ye22b" path="res://assets/sprites/interactive_components/campfire.png" id="2_xvfwu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wiums"]
 atlas = ExtResource("2_xvfwu")

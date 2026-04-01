@@ -1,7 +1,7 @@
 [gd_scene load_steps=43 format=3 uid="uid://bbuabuciooak2"]
 
 [ext_resource type="Script" uid="uid://cyx1ayt0dtqt" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="Texture2D" uid="uid://4qpxexffqb7f" path="res://assets/sprites/knight.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://4qpxexffqb7f" path="res://assets/sprites/characters/knight.png" id="2_g2els"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dqkch"]
 radius = 4.0
@@ -310,23 +310,23 @@ script = ExtResource("1_g2els")
 
 [node name="normalCollisionShape" type="CollisionShape2D" parent="."]
 z_index = 1
-position = Vector2(47, 34)
 shape = SubResource("CapsuleShape2D_dqkch")
 
 [node name="rollCollisionShape" type="CollisionShape2D" parent="."]
 z_index = 1
-position = Vector2(47, 38)
+position = Vector2(0, 4)
 scale = Vector2(0.847271, 0.29755)
 shape = SubResource("CapsuleShape2D_g2els")
 disabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(47, 29)
+position = Vector2(0, -5)
 sprite_frames = SubResource("SpriteFrames_qlg0r")
-animation = &"damage"
+animation = &"run"
+frame_progress = 0.0535952
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(47, 32)
+position = Vector2(0, -2)
 zoom = Vector2(4, 4)
 limit_smoothed = true
 position_smoothing_enabled = true

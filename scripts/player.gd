@@ -23,7 +23,7 @@ const DAMAGE_DURATION: float = 1.5
 
 func _ready() -> void:
 	Global.player = self
-				
+		
 	hud.update_health_display(health)
 	hud.update_coin_display(coins)
 	
@@ -53,41 +53,27 @@ func take_damage(damage_dealt):
 	hud.update_health_display(health)
 
 # player dies
-func die():		
+func die():	
 	# reset coins to before death
 	Global.game_manager.reset_coins()
 	self.coins = Global.game_manager.playerSave.coins
 	hud.update_coin_display(coins)
 	
-	#load the level that the player last saved in
-	Global.game_manager.load_level(Global.game_manager.playerSave.level)
-	
 	# reset the player to their position in their last save
 	self.global_position = Global.game_manager.playerSave.position
-	
+		
+	#load the level that the player last saved in
+	Global.game_manager.reset_level()
+		
 	full_heal()
 	self.current_state = State.NORMAL
-
-# player transitions to a new level
-func set_new_level_position(portal_id):
-	# find the corresponding portal in the new level
-	var levelTransitionNodes: Array[Node] = get_tree().get_nodes_in_group("level_transitions")
-	var correspondingTransitionNode: Node = findMatch(levelTransitionNodes, portal_id)
-
-	if correspondingTransitionNode == null:
-		print("portal not found for portal id %s" % portal_id) 
-		
-	# set the players position to the new portal
-	self.global_position.x = correspondingTransitionNode.global_position.x
-	self.global_position.y = correspondingTransitionNode.global_position.y - 50
 	
-# find corresponding portal_id to portal that was just used
-func findMatch(list, portalId):
-	for item in list:
-		if (item.portal_id == portalId and item.isActive):
-			return item
-	return null
-		
+func startSceneTransition():
+	normal_collision_shape.disabled = true
+	
+func endSceneTransition():
+	normal_collision_shape.disabled = false
+			
 func _physics_process(delta: float) -> void:
 	# add gravity
 	if not is_on_floor():
@@ -140,7 +126,7 @@ func _physics_process(delta: float) -> void:
 		State.SAVE:
 			animated_sprite.play("save")
 			return
-	
+				
 	# Apply movement
 	if direction:
 		velocity.x = direction * SPEED
